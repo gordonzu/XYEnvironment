@@ -26,7 +26,7 @@ public class XYEnvironmentTest {
 	@Test
 	public void testAddObject() {
 		Assert.assertEquals(1, env.getAgents().size());
-		//Assert.assertEquals(new XYLocation(3, 4), env.getCurrentLocationFor(a));
+		Assert.assertEquals(new XYLocation(3, 4), env.getCurrentLocationFor(a));
     Assert.assertTrue(true);
 	}
 

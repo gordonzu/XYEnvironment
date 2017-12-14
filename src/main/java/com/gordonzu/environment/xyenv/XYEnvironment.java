@@ -20,43 +20,56 @@ public class XYEnvironment extends AbstractEnvironment {
     } 
 
    	public void addObjectToLocation(EnvironmentObject eo, XYLocation loc) {
-		    moveObjectToAbsoluteLocation(eo, loc);
-	  }
+    	moveObjectToAbsoluteLocation(eo, loc);
+	}
 
     public void moveObjectToAbsoluteLocation(EnvironmentObject eo, XYLocation loc) {
-		    envState.moveObjectToAbsoluteLocation(eo, loc);
-		    addEnvironmentObject(eo);
-	  }
+		envState.moveObjectToAbsoluteLocation(eo, loc);
+		addEnvironmentObject(eo);
+	}
 
+	public XYLocation getCurrentLocationFor(EnvironmentObject eo) {
+    	return envState.getCurrentLocationFor(eo);
+	}
 }
 
 class XYEnvironmentState {
     int height;
     int width;
 
-		private Map<XYLocation, Set<EnvironmentObject>> objsAtLocation = new LinkedHashMap<XYLocation, Set<EnvironmentObject>>();
+    private Map<XYLocation, Set<EnvironmentObject>> objsAtLocation = new LinkedHashMap<XYLocation, Set<EnvironmentObject>>();
 
     public XYEnvironmentState(int width, int height) {
         this.width = width;
         this.height = height;
     }  
 
-		public void moveObjectToAbsoluteLocation(EnvironmentObject eo, XYLocation loc) {
-				for (Set<EnvironmentObject> eos : objsAtLocation.values()) {
-						if (eos.remove(eo)) {
-								break; // Should only every be at 1 location
-						}
-				}
-				getObjectsAt(loc).add(eo);
-		}
+    public void moveObjectToAbsoluteLocation(EnvironmentObject eo, XYLocation loc) {
+	    for (Set<EnvironmentObject> eos : objsAtLocation.values()) {
+            if (eos.remove(eo)) {
+                break; // Should only every be at 1 location
+            }
+        }
+        getObjectsAt(loc).add(eo);
+    }
 
-		public Set<EnvironmentObject> getObjectsAt(XYLocation loc) {
-				Set<EnvironmentObject> objectsAt = objsAtLocation.get(loc);
-				if (null == objectsAt) {
-						// Always ensure an empty Set is returned
-						objectsAt = new LinkedHashSet<EnvironmentObject>();
-						objsAtLocation.put(loc, objectsAt);
-				}
-				return objectsAt;
-		}
+    public Set<EnvironmentObject> getObjectsAt(XYLocation loc) {
+        Set<EnvironmentObject> objectsAt = objsAtLocation.get(loc);
+        if (null == objectsAt) {
+            // Always ensure an empty Set is returned
+            objectsAt = new LinkedHashSet<EnvironmentObject>();
+            objsAtLocation.put(loc, objectsAt);
+        }
+        return objectsAt;
+    }
+
+    public XYLocation getCurrentLocationFor(EnvironmentObject eo) {
+        for (XYLocation loc : objsAtLocation.keySet()) {
+            if (objsAtLocation.get(loc).contains(eo)) {
+                return loc;
+            }
+        }
+        return null;
+    }
 }
+
