@@ -20,12 +20,16 @@ public abstract class AbstractEnvironment implements Environment, EnvironmentVie
     
     protected Set<EnvironmentObject> envObjects = new LinkedHashSet<>();
     protected Set<Agent> agents = new LinkedHashSet<>();
-		protected Set<EnvironmentView> views = new LinkedHashSet<>();
+	protected Set<EnvironmentView> views = new LinkedHashSet<>();
+
+	public List<Agent> getAgents() {
+	    return new ArrayList<>(agents);
+    }
 
     public void addEnvironmentObject(EnvironmentObject eo) {
 		    envObjects.add(eo);
 		    if (eo instanceof Agent) {
-			      Agent a = (Agent) eo;
+		        Agent a = (Agent) eo;
 			          if (!agents.contains(a)) {
 				            agents.add(a);
 				            notifyEnvironmentViews(a);
